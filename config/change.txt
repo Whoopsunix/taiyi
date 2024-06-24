@@ -1,0 +1,116 @@
+scaninfo
+\x05\x00\x0d\x03\x10\x00\x00\x00\x18\x00\x00\x00\x00\x08\x01@\x04\x00\x01\x05\x00\x00\x00\x00
+
+原始
+^\x05\0\r\x03\x10\0\0\0\x18\0\0\0v\x07\0\0\x04\0\x01\x05\0\0.\0$
+
+脚本转化
+^\\x05\\0\\r\\x03\\x10\\0\\0\\0\\x18\\0\\0\\0v\\x07\\0\\0\\x04\\0\\x01\\x05\\0\\0.\\0$
+
+
+
+脚本
+\\0\\x1E\\0\\x06\\x01\\0\\0\\x01\\0\\0\\0\\0\\0\\0\\x07version\\x04bind\\0\\0\\x10\\0\\x03
+原始
+\0\x1E\0\x06\x01\0\0\x01\0\0\0\0\0\0\x07version\x04bind\0\0\x10\0\x03
+
+\x00\x1E\x00\x06\x01\x00\x00\x01\x00\x00\x00\x00\x00\x00\x07version\x04bind\x00\x00\x10\x00\x03
+
+scaninfo
+000000a4ff534d4272000000000801400000000000000000000000000000400600000100008100025043204e4554574f524b2050524f4752414d20312e3000024d4943524f534f4654204e4554574f524b5320312e303300024d4943524f534f4654204e4554574f524b5320332e3000024c414e4d414e312e3000024c4d312e3258303032000253616d626100024e54204c414e4d414e20312e3000024e54204c4d20302e313200
+
+脚本
+\\0\\0\\0\\xa4\\xff\\x53\\x4d\\x42\\x72\\0\\0\\0\\0\\x08\\x01\\x40\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\x40\\x06\\0\\0\\x01\\0\\0\\x81\\0\\x02PC NETWORK PROGRAM 1.0\\0\\x02MICROSOFT NETWORKS 1.03\\0\\x02MICROSOFT NETWORKS 3.0\\0\\x02LANMAN1.0\\0\\x02LM1.2X002\\0\\x02Samba\\0\\x02NT LANMAN 1.0\\0\\x02NT LM 0.12\\0
+
+原版
+\0\0\0\xa4\xff\x53\x4d\x42\x72\0\0\0\0\x08\x01\x40\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x40\x06\0\0\x01\0\0\x81\0\x02PC NETWORK PROGRAM 1.0\0\x02MICROSOFT NETWORKS 1.03\0\x02MICROSOFT NETWORKS 3.0\0\x02LANMAN1.0\0\x02LM1.2X002\0\x02Samba\0\x02NT LANMAN 1.0\0\x02NT LM 0.12\0
+
+可接受
+\x00\x00\x00\xa4\xff\x53\x4d\x42\x72\x00\x00\x00\x00\x08\x01\x40\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x40\x06\x00\x00\x01\x00\x00\x81\x00\x02PC NETWORK PROGRAM 1.0\x00\x02MICROSOFT NETWORKS 1.03\x00\x02MICROSOFT NETWORKS 3.0\x00\x02LANMAN1.0\x00\x02LM1.2X002\x00\x02Samba\x00\x02NT LANMAN 1.0\x00\x02NT LM 0.12\x00
+
+
+
+正则
+^\\x05\\0\\r\\x03\\x10\\0\\0\\0\\x18\\0\\0\\0....\\x04\\0\\x01\\x05\\0...$
+^\x05\x00\r\x03\x10\x00\x00\x00\x18\x00\x00\x00....\x04\x00\x01\x05\x00...$
+
+05000d031000000018000000000801400400010500000000
+[5 0 13 3 16 0 0 0 24 0 0 0 0 8 1 64 4 0 1 5 0 0 0 0]
+\x05\x00\x0d\x03\x10\x00\x00\x00\x18\x00\x00\x00\x00\x08\x01\x40\x04\x00\x01\x05\x00\x00\x00\x00
+
+
+
+^\xff\xfb\x01\xff\xfb\x03Telnet Gateway ready=enter computer name to connect to\.\\x0d\\x0a\\xd\\xahost\[:port\]: \r\n
+^\\xff\\xfb\\x01\\xff\\xfb\\x03Telnet Gateway ready=enter computer name to connect to\\.\\\\x0d\\\\x0a\\\\xd\\\\xahost\\[:port\\]: \\r\\n
+^\xff\xfb\x01\xff\xfb\x03Telnet Gateway ready=enter computer name to connect to\\.\\\x0d\\\x0a\\\xd\\\xahost\\[:port\\]: \\r\\n
+----------------------
+对脚本替换
+大小写忽略
+\\0	\x00
+\\x	\x
+\\	\\\\
+\\. \\\\.
+
+不变
+go的转义是\\
+\\^ \\d \
+\\n \\r
+
+|	\\|
+\x7c	\\\x7c
+原版\\x \\\\x 手动
+
+3版-原版基础
+\x7c	\\\x7c
+\\x \\\\x 手动
+
+4版-原版基础
+\\r - \r
+\\n - \n
+
+5版-3版基础
+\\r - \r
+\\n - \n
+
+
+6版-5版基础
+
+weblogic不能匹配问题
+^HTTP/1\\.1 \\d\\d\\d (?:[^\r\n]*\r\n(?!\r\n))*?Connection: close\r\nDate: .*\nX-Powered-By: Servlet/([\\w._-]+) JSP/([\\w._-]+)\r\n
+改为结果notfound识别
+^HTTP/1\\.1 \\d\\d\\d(.|\r\n)*Connection: close\r\nDate: (.*\n){0,10}X-Powered-By: Servlet/([\\w._-]+) JSP/([\\w._-]+)\r\n
+改为\s\S识别全部字符
+^HTTP/1\\.1 \\d\\d\\d(.|\r\n)*Connection: close\r\nDate: [\\s\\S]*\nX-Powered-By: Servlet/([\\w._-]+) JSP/([\\w._-]+)\r\n
+^HTTP/1\\.1 \\d\\d\\d[\\s\\S]*Connection: close\r\nDate: [\\s\\S]*\nX-Powered-By: Servlet/([\\w._-]+) JSP/([\\w._-]+)\r\n
+
+
+
+\\d\\d\\d (?:[^\r\n]*\r\n(?!\r\n))*?  ->   \\d\\d\\d [\\s\\S]*\n
+	\\d\\d\\d[\\s\\S]
+	//无法匹配多行
+	HTTP/1\.1 \d\d\d .*
+	//可匹配多行
+	HTTP/1\.1 \d\d\d [\s\S]*\n
+\\d\\d\\d.*?\r\n		-> \\d\\d\\d[\\s\\S]*\r\n
+\\d\\d\\d.*\r\n			-> \\d\\d\\d[\\s\\S]*\r\n
+
+Date: .*\n
+DATE: .*\n
+	D(?:ate|ATE): [\\s\\S]*\n
+
+Date: .*\r\n
+	D(?:ate|ATE): [\\s\\S]*\r\n
+
+遇到Date: .*\n\n
+
+参数问题technique或者type
+sv 端口加指纹
+st 只扫描端口
+sp 存活探测
+
+
+7版
+https://www.anquanke.com/post/id/251097#h2-5
+tomcat问题
+\xff..Host
+[\\s\\S]..Host
